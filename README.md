@@ -71,7 +71,7 @@ pnpm install
 ```
 3. Crea manualmente un archivo `variables.env` en la raíz del proyecto con la siguiente estructura:
 ```
-MONGO_URI=mongodb:tu_url_de_mongo_db
+MONGO_URI=mongodb://tu_url_de_mongo_db
 SECRET=tu_clave_secreta_para_tokens
 ```
 <p align="center"><em>Cambia las credenciales según tu propia configuración.</em></p> <br>
