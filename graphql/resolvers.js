@@ -1,5 +1,6 @@
 const User = require('../model/User');
 const Patient = require('../model/Patient');
+const Specialty = require('../model/Specialty');
 const {createToken, hashPassword, isAuthenticated } = require('./auth');
 const bcrypt = require('bcryptjs');
 require('dotenv').config({path: 'variables.env'});
@@ -30,7 +31,17 @@ const resolvers = {
                 console.error('Error fetching patients:', error);
                 throw new Error('Error fetching patients');
             }
-        }
+        },
+
+        getSpecialties: async (_, __, context) => {
+            isAuthenticated(context);
+            try {
+                return await Specialty.find({});
+            } catch (error) {
+                console.error('Error fetching specialties:', error);
+                throw new Error('Error fetching specialties');
+            }
+        },
     },
     Mutation:{
         registerUser: async (_, {input}) => {
@@ -99,6 +110,29 @@ const resolvers = {
             catch (error) {
                 console.error('Error creating patient:', error);
                 throw new Error('Error creating patient');
+            }
+        },
+
+        createSpecialty: async(_, {input}, context) => {
+            isAuthenticated(context);
+            const { name } = input;
+
+            try {
+
+                const existingSpecialty = await Specialty.findOne({ name });
+                if (existingSpecialty) {
+                    throw new Error('Specialty already exists with this name');
+                }
+
+                const specialty = new Specialty({
+                    name,
+                });
+
+                return await specialty.save();
+            }
+            catch (error) {
+                console.error('Error creating specialty:', error);
+                throw new Error('Error creating specialty');
             }
         },
     }
