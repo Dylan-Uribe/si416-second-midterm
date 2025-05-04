@@ -33,6 +33,22 @@ const resolvers = {
             }
         },
 
+        getPatient: async (_, {id}, context) => {
+            isAuthenticated(context);
+            try{
+                const patient = await Patient.findById(id);
+                if (!patient) {
+                    throw new Error('Patient not found');
+                }
+
+                return patient;
+            }
+            catch (error) {
+                console.error('Error fetching patient:', error);
+                throw new Error('Error fetching patient data');
+            }
+        },
+
         getSpecialties: async (_, __, context) => {
             isAuthenticated(context);
             try {
