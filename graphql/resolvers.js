@@ -1,4 +1,5 @@
 const User = require('../model/User');
+const Patient = require('../model/Patient');
 const {createToken, hashPassword, isAuthenticated } = require('./auth');
 const bcrypt = require('bcryptjs');
 require('dotenv').config({path: 'variables.env'});
@@ -20,6 +21,16 @@ const resolvers = {
                 throw new Error('Error fetching user data');
             }
         },
+
+        getPatients: async (_, __, context) => {
+            isAuthenticated(context);
+            try {
+                return await Patient.find({});
+            } catch (error) {
+                console.error('Error fetching patients:', error);
+                throw new Error('Error fetching patients');
+            }
+        }
     },
     Mutation:{
         registerUser: async (_, {input}) => {
@@ -64,7 +75,32 @@ const resolvers = {
                 token: createToken(user, process.env.SECRET, '24h')
             };
 
-        }
+        },
+
+        createPatient: async(_, {input}, context) => {
+            isAuthenticated(context);
+            const { name, dni, phone } = input;
+
+            try {
+
+                const existingPatient = await Patient.findOne({ dni });
+                if (existingPatient) {
+                    throw new Error('Patient already exists with this DNI');
+                }
+
+                const patient = new Patient({
+                    name,
+                    dni,
+                    phone,
+                });
+
+                return await patient.save();
+            }
+            catch (error) {
+                console.error('Error creating patient:', error);
+                throw new Error('Error creating patient');
+            }
+        },
     }
 };
 
