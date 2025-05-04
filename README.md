@@ -124,8 +124,6 @@ La mayoría de las operaciones requieren autenticación mediante un token JWT. P
   "Authorization": "OBTENIDO_DE_LOGIN"
 }
 ```
-<hr>
-Desarrollado como parte del segundo parcial para la materia de Desarrollo Web - UPSA 2025.
 
 ## 📞 Contacto
 
@@ -133,3 +131,6 @@ Si tienes alguna pregunta o sugerencia, no dudes en contactarme:
 
 - **Nombre**: Dylan Uribe
 - **Correo**: a2022112008@estudiantes.upsa.edu.bo
+
+<hr>
+Desarrollado como parte del segundo parcial para la materia de Desarrollo Web - UPSA 2025.
