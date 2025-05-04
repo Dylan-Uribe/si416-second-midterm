@@ -1,12 +1,24 @@
 const User = require('../model/User');
 const {createToken, hashPassword, isAuthenticated } = require('./auth');
+const bcrypt = require('bcryptjs');
 require('dotenv').config({path: 'variables.env'});
 
 const resolvers = {
     Query: {
         me: async (_, __, context) => {
-            const user = isAuthenticated(context);
-            return user;
+            const userToken = isAuthenticated(context);
+
+            try{
+                const user = await User.findById(userToken.id);
+                if (!user) {
+                    throw new Error('User not found');
+                }
+                return user;
+            }
+            catch (error) {
+                console.error('Error fetching user:', error);
+                throw new Error('Error fetching user data');
+            }
         },
     },
     Mutation:{
@@ -33,6 +45,25 @@ const resolvers = {
                 console.log(error);
                 throw new Error('Error saving user to database');
             }
+        },
+
+        login: async(_, {input}) => {
+            const { email, password } = input;
+            const user = await User.findOne({email});
+
+            if (!user) {
+                throw new Error('User not found with this email');
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                throw new Error('Incorrect password');
+            }
+
+            return {
+                token: createToken(user, process.env.SECRET, '24h')
+            };
+
         }
     }
 };
