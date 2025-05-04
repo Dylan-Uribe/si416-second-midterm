@@ -8,7 +8,11 @@
     "dev": "nodemon ."
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Dylan Uribe",
+    "email": "a2022112008@estudiantes.upsa.edu.bo",
+    "url": "https://github.com/Dylan-Uribe"
+  },
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {
