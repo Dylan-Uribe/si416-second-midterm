@@ -1,6 +1,7 @@
 const User = require('../model/User');
 const Patient = require('../model/Patient');
 const Specialty = require('../model/Specialty');
+const Appointment = require('../model/Appointment');
 const {createToken, hashPassword, isAuthenticated } = require('./auth');
 const bcrypt = require('bcryptjs');
 require('dotenv').config({path: 'variables.env'});
@@ -58,6 +59,35 @@ const resolvers = {
                 throw new Error('Error fetching specialties');
             }
         },
+
+        getAppointments: async (_, __, context) => {
+            isAuthenticated(context);
+            try {
+                return await Appointment.find({})
+                    .populate('patient')
+                    .populate('specialty');
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                throw new Error('Error fetching appointments');
+            }
+        },
+
+        getAppointmentsByPatient: async (_, {patientId}, context) => {
+            isAuthenticated(context);
+            try {
+                const patientExists = await Patient.findById(patientId);
+                if (!patientExists) {
+                    throw new Error('Patient not found');
+                }
+
+                return await Appointment.find({ patient: patientId })
+                    .populate('patient')
+                    .populate('specialty');
+            } catch (error) {
+                console.error('Error fetching appointments by patient:', error);
+                throw new Error('Error fetching appointments by patient');
+            }
+        }
     },
     Mutation:{
         registerUser: async (_, {input}) => {
@@ -151,6 +181,39 @@ const resolvers = {
                 throw new Error('Error creating specialty');
             }
         },
+
+        createAppointment: async (_, {input}, context) =>{
+            isAuthenticated(context);
+
+            const { patientId, specialtyId, date } = input;
+
+            const patientExists = await Patient.findById(patientId);
+            if (!patientExists) {
+                throw new Error('Patient not found');
+            }
+
+            const specialtyExists = await Specialty.findById(specialtyId);
+            if (!specialtyExists) {
+                throw new Error('Specialty not found');
+            }
+
+            const appointment = new Appointment({
+                patient: patientId,
+                specialty: specialtyId,
+                date,
+            });
+
+            try {
+                const savedAppointment = await appointment.save();
+                return await Appointment.findById(savedAppointment._id)
+                    .populate('patient')
+                    .populate('specialty');
+
+            } catch (error) {
+                console.error('Error creating appointment:', error);
+                throw new Error('Error creating appointment');
+            }
+        }
     }
 };
 
