@@ -1,5 +1,5 @@
 <div>
-  <img src="https://virtual.upsa.edu.bo/pluginfile.php/1/theme_lambda/logo/1744939487/logo%20UPSA-universidad-03.png"alt="Descripción de la imagen" width="100%" />
+  <img src="https://virtual.upsa.edu.bo/pluginfile.php/1/theme_lambda/logo/1744939487/logo%20UPSA-universidad-03.png" alt="Descripción de la imagen" width="100%" />
 </div>
 
 # Sistema de Gestión de Turnos para Clínica Odontológica
@@ -126,3 +126,10 @@ La mayoría de las operaciones requieren autenticación mediante un token JWT. P
 ```
 <hr>
 Desarrollado como parte del segundo parcial para la materia de Desarrollo Web - UPSA 2025.
+
+## 📞 Contacto
+
+Si tienes alguna pregunta o sugerencia, no dudes en contactarme:
+
+- **Nombre**: Dylan Uribe
+- **Correo**: a2022112008@estudiantes.upsa.edu.bo
